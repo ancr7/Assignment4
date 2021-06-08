@@ -4,17 +4,16 @@ import java.sql.ResultSet;
 
 public class View implements Runnable {
 
-  private Thread ReadThread;
-  private ResultSet DBSnapshot;
-  private final String DBName = "ItemTable";
+  private Thread readThread;
+  private ResultSet dbsnapshot;
+  private final String dbName = "ItemTable";
   private final String query = "select * from ItemTable,TaxTable where ItemTable.id = TaxTable.id";
   static boolean alive = false;
-  private DBConnect dbConnect;
-//  AssignmentService assignmentService;
+  private Repo repo;
 
   View() {
-    ReadThread = null;
-    dbConnect = new DBConnect();
+    readThread = null;
+    repo = new Repo();
   }
 
   static boolean isAlive() {
@@ -23,18 +22,18 @@ public class View implements Runnable {
 
   @Override
   synchronized public void run() {
-    System.out.println(DBName);
+    System.out.println(dbName);
     try {
-      while (WriteDB.isAlive()) {
-        System.out.println("WAIT!!!!!!");
+      while (WriteServiceImpl.isAlive()) {
+
         Thread.sleep(500);
       }
-      DBSnapshot = dbConnect.readDatabase(query);
-      while (DBSnapshot.next()) {
+      dbsnapshot = repo.readDatabase(query);
+      while (dbsnapshot.next()) {
         System.out.println("-----------------------------------------------------------------");
         String queryOutput =
-            "name: " + DBSnapshot.getString("name") + " type: " + DBSnapshot.getString("type")
-                + " price: " + DBSnapshot.getString("price") + " quantity: " + DBSnapshot
+            "name: " + dbsnapshot.getString("name") + " type: " + dbsnapshot.getString("type")
+                + " price: " + dbsnapshot.getString("price") + " quantity: " + dbsnapshot
                 .getString("quantity");
         System.out.println(queryOutput);
         System.out.println("-----------------------------------------------------------------");
@@ -47,10 +46,10 @@ public class View implements Runnable {
   }
 
   public void start() {
-    if (ReadThread == null) {
-      ReadThread = new Thread(this, DBName);
+    if (readThread == null) {
+      readThread = new Thread(this, dbName);
       alive = true;
-      ReadThread.start();
+      readThread.start();
     }
   }
 }

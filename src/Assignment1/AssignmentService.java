@@ -158,7 +158,7 @@ public class AssignmentService {
     // 2. if input is valid, extract input then store into model class
     extractData(inputString);
     // 3. calculate tax and return final data to controller
-    System.out.println("Data Extracted sucessfully");
+//    System.out.println("Data Extracted sucessfully");
     return calculateCost();
   }
 }

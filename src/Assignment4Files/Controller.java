@@ -1,12 +1,13 @@
 package Assignment4Files;
 
 public class Controller {
-  public static void main(String[] args) throws InterruptedException {
-    ReadDB readDB = new ReadDB();
-    WriteDB writeDB = new WriteDB();
+
+  public static void main(String[] args) {
+    ReadServiceImpl readServiceImpl = new ReadServiceImpl();
+    WriteServiceImpl writeServiceImpl = new WriteServiceImpl();
     View view = new View();
-    readDB.start();
-    writeDB.start();
+    readServiceImpl.start();
+    writeServiceImpl.start();
     view.start();
   }
 }
